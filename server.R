@@ -50,7 +50,7 @@ shinyServer(function(input, output) {
     
     # All contestants in a selected tournament
     output[[paste0("dtContestants", dfAllLeagues$id[i])]] <- DT::renderDataTable({
-      validate(
+      shiny::validate(
         need(input[[paste0("dtLeague", dfAllLeagues$id[i], "_rows_selected")]], "Select a row.")
       )
       
