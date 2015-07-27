@@ -25,8 +25,12 @@ shinyServer(function(input, output) {
       tabItem(paste0("tabLeague", dfAllLeagues$id[i]),
               tabBox(width = 12, height = "1200px",
                      tabPanel("Tournaments",
-                              column(8, DT::dataTableOutput(paste0("dtLeague", dfAllLeagues$id[i]))),
-                              column(4, DT::dataTableOutput(paste0("dtContestants", dfAllLeagues$id[i])))
+                              box(DT::dataTableOutput(paste0("dtLeague", dfAllLeagues$id[i])),
+                                  title = "Tournaments", solidHeader = TRUE, status = "primary",
+                                  width = 8),
+                              box(DT::dataTableOutput(paste0("dtContestants", dfAllLeagues$id[i])),
+                                  title = "Contestants", solidHeader = TRUE, status = "primary",
+                                  width = 4)
                      ),
                      tabPanel("Test",
                               textOutput(paste0("textLeague", dfAllLeagues$id[i])))))
@@ -42,6 +46,7 @@ shinyServer(function(input, output) {
       df <- rbindlist(lapply(listTournaments, function(l) l[[1]])) 
       values$currentTournament <- df
       df %<>% 
+        mutate(dateBegin = as.Date(dateBegin), dateEnd = as.Date(dateEnd)) %>% 
         select(Season = season, Name = namePublic, `Start date` = dateBegin, `End date` = dateEnd)
       df[["# teams"]]<- sapply(listTournaments, function(l) nrow(l[[2]]))
       df %>% 
